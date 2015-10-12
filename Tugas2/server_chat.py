@@ -152,7 +152,12 @@ def chat_server():
 						# remove the socket that's broken    
 						if sock in SOCKET_LIST:
 							SOCKET_LIST.remove(sock)
-
+						
+						for x in range (len(NAME_LIST)):
+							if NAME_LIST[x] == sock :
+								NAME_LIST.pop(x+1)
+								NAME_LIST.pop(x)
+						
 						# at this stage, no data means probably the connection has been broken
 						broadcast(server_socket, sock, "Client (%s, %s) is offline\n" % addr) 
 
@@ -174,6 +179,9 @@ def broadcast (server_socket, sock, message):
             except :
                 # broken socket connection
                 NAME_LIST[x].close()
+                
+                NAME_LIST.pop(x+1)
+                NAME_LIST.pop(x)
                 # broken socket, remove it
                 if NAME_LIST[x] in SOCKET_LIST:
                     SOCKET_LIST.remove(NAME_LIST[x])
@@ -183,6 +191,11 @@ def send_msg (sock, message):
 		sock.send(message)
 	except:
 		sock.close()
+		
+		for x in range (len(NAME_LIST)):
+			if sock == NAME_LIST[x]:
+				NAME_LIST.pop(x+1)
+				NAME_LIST.pop(x)
 		
 		if sock in SOCKET_LIST:
 			SOCKET_LIST.remove(sock)

@@ -42,8 +42,6 @@ def chat_server():
 				SOCKET_LIST.append(sockfd)
 				print "Client (%s, %s) is connected" % addr
 				 
-				broadcast(server_socket, sockfd, "[%s:%s] has joined the chat\n" % addr)
-			 
 			# a message from a client, not a new connection
 			else:
 				# process data received from client, 
@@ -52,7 +50,6 @@ def chat_server():
 					data = sock.recv(RECV_BUFFER)
 					#data = pickle.loads(data)
 					if data:
-						#broadcast(server_socket, sock, "\r" + '[' + str(sock.getpeername()) + '] ' + data)  
 						temp1 = string.split(data[:-1])
 				
 						d=len(temp1)
@@ -158,12 +155,12 @@ def chat_server():
 								NAME_LIST.pop(x+1)
 								NAME_LIST.pop(x)
 						
-						# at this stage, no data means probably the connection has been broken
-						broadcast(server_socket, sock, "Client (%s, %s) is offline\n" % addr) 
+						# at this stage, no data means probably the connection has been broken 
+						print "Client (%s, %s) is disconnected" % addr
 
 				# exception 
 				except:
-					broadcast(server_socket, sock, "Client (%s, %s) is offline\n" % addr)
+					print "Client (%s, %s) is disconnected" % addr
 					continue
 
 	server_socket.close()

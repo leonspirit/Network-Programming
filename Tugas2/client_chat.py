@@ -23,7 +23,7 @@ def chat_client():
 		print 'Client is unable to connect'
 		sys.exit()
      
-	print 'Client is now connected to remote host. You can start sending messages'
+	print 'Client is now connected to server. You can start sending messages'
 	sys.stdout.write('>> '); sys.stdout.flush()
      
 	while 1:
@@ -54,38 +54,38 @@ def chat_client():
 				d=len(temp1)
 				if temp1[0]=="login" :
 					if d>2:
-						print('Username Invalid')
+						print('[System] : Username Invalid')
 					elif d<2:
-						print('Login need username')
+						print('[System] : Login need username')
 					else:
 						s.send(temp)
 						
 				elif temp1[0]=="send" :
 					if d<3:
-						print('Invalid Send Command')
+						print('[System] : Invalid Send Command')
 					else:
 						s.send(temp)
 						
 				elif temp1[0]=="sendall" :
 					if d<2:
-						print("Invalid SendAll Command")
+						print("[System] : Invalid SendAll Command")
 					else:
 						s.send(temp)
 						
 				elif temp1[0]=="list" :
 					if d>1:
-						print('List doesnt have parameter')
+						print('[System] : List doesnt have parameter')
 					else:
 						s.send(temp)
 						
 				elif temp1[0]=="whoami" :
 					if d>1:
-						print('Whoami doesnt have parameter')
+						print('[System] : Whoami doesnt have parameter')
 					else:
 						s.send(temp)
 						
 				else:
-					print ('Invalid Command')
+					print ('[System] : Invalid Command')
 				
 				#s.send(temp)
 				sys.stdout.write('>> '); sys.stdout.flush() 

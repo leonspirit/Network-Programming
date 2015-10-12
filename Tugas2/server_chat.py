@@ -66,7 +66,7 @@ def chat_server():
 									user=NAME_LIST[x+1]
 							
 							if logged==0:
-								send_msg(sock, "Please login first\n")
+								send_msg(sock, "[System] : Please login first\n")
 							
 							else:
 								temp2=""
@@ -103,7 +103,7 @@ def chat_server():
 									user=NAME_LIST[x+1]
 							
 							if logged==0:
-								send_msg(sock, "Please login first\n")
+								send_msg(sock, "[System] : Please login first\n")
 							
 							else:
 								temp2=""
@@ -124,7 +124,7 @@ def chat_server():
 									logged=1
 							
 							if logged==0:
-								send_msg(sock, "Please login first\n")
+								send_msg(sock, "[System] : Please login first\n")
 							
 							else:
 								temp2=""
@@ -141,10 +141,10 @@ def chat_server():
 									g = 1
 									send_msg(sock, "Your username is "+str(NAME_LIST[name+1])+"\n")
 							if g==0:
-								send_msg(sock, "You haven't login\n")
+								send_msg(sock, "[System] : You haven't login\n")
 								
 						else:
-							print ('Invalid Command')
+							print ('Invalid Command - Client code doesnt handle error')
 					else:
 						# remove the socket that's broken    
 						if sock in SOCKET_LIST:
@@ -207,12 +207,12 @@ def log_in (sock, user):
 			f = 1
 	
 	if f==1:
-		send_msg(sock, "You already has a username\n")
+		send_msg(sock, "[System] : You already has a username\n")
 	elif g==1:
-		send_msg(sock, "Username already exist\n")
+		send_msg(sock, "[System] : Username already exist\n")
 	else:
 		NAME_LIST.append(sock)
 		NAME_LIST.append(user)
-		send_msg(sock, "Login success\n")
+		send_msg(sock, "[System] : Login success\n")
 	
 chat_server()

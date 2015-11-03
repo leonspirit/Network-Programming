@@ -1,37 +1,56 @@
-import sys
+import threading
 import socket
 import time
+import sys
 
-REQ_SIZE = 10
-RECV_BUFFER_SIZE = 1024
-message = "<html><body><i>Hello <b>World!</b> </i> <br> <u>Ari here</u> </body> </html>"
+def load_file(name):
+	data = open(name)
+	return data.read()
 
-# Create a TCP/IP socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
-sys.stdout.write('Port : ')
-PORT = raw_input()
-PORT = int (PORT)
-
-# Bind the socket to the port
-server_address = ('localhost', PORT)
-print >>sys.stderr, 'starting up on %s port %s' % server_address
-sock.bind(server_address)
-
-# Listen for incoming connections
-sock.listen(REQ_SIZE)
-
-while True:
-	# Wait for a connection
-	print >>sys.stderr, 'waiting for a connection'
-	connection, client_address = sock.accept()
-	print >>sys.stderr, 'Connection from', client_address
-	print ''
-	request = connection.recv(RECV_BUFFER_SIZE)
-	data = "HTTP/1.1 200 OK\n\n%s"%message
-	print (request.decode())
-	connection.send(data)
+class MemprosesClient(threading.Thread):
+	def __init__(self,client_socket,client_address,nama):
+		self.client_socket = client_socket
+		self.client_address = client_address
+		self.nama = nama
+		threading.Thread.__init__(self)
 	
-	# Clean up the connection
-	connection.close()
+	def run(self):
+		message = ''
+		while True:
+        		data = self.client_socket.recv(32)
+            		if data:
+						message = message + data #collect seluruh data yang diterima
+						if message.endswith('\r\n\r\n'):
+							self.client_socket.send('hola')
+							break
+            		else:
+               			break
+		self.client_socket.close()
+		
+
+
+class Server(threading.Thread):
+	def __init__(self):
+		self.my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		sys.stdout.write('Port : ')
+		port = raw_input()
+		port = int (port)
+		self.server_address = ('localhost',port)
+		self.my_socket.bind(self.server_address)
+		threading.Thread.__init__(self)
+
+	def run(self):
+		self.my_socket.listen(1)
+		nomor=0
+		while (True):
+			self.client_socket, self.client_address = self.my_socket.accept()
+			nomor=nomor+1
+			
+			my_client = MemprosesClient(self.client_socket, self.client_address, 'PROSES NOMOR '+str(nomor))
+			my_client.start()
+			#----
+
+serverku = Server()
+serverku.start()
+
+
